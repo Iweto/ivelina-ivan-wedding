@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Сватба | Ивелина & Иван</title>
+  <meta name="description" content="Покана за сватбата на Ивелина и Иван" />
+  <style>
+    :root{
+      --bg:#e9c7cf; /* светло бордо */
+      --card:rgba(255,250,245,.95);
+      --text:#2b0f16;
+      --muted:#6e4f56;
+      --accent:#7a1028; /* наситено бордо */
+      --accent2:#c6a54a; /* златисто */
+      --border:rgba(0,0,0,.10);
+      --shadow: 0 18px 50px rgba(20,12,14,.12);
+      --radius: 22px;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      letter-spacing: .1px;
+      color:var(--text);
+      background:
+        linear-gradient(180deg, #f4d8de 0%, var(--bg) 60%, #f4d8de 100%);
+    }
+    a{color:inherit}
+    .container{max-width:1020px;margin:0 auto;padding:28px 18px 80px}
+    .nav{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter: blur(12px);
+      background: rgba(233,199,207,.9);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{max-width:1020px;margin:0 auto;padding:12px 18px;display:flex;align-items:center;gap:14px;justify-content:space-between}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.2px}
+    .pill{width:10px;height:10px;border-radius:999px;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:0 0 0 4px rgba(214,179,106,.12)}
+    .links{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .links a{padding:8px 10px;border:1px solid transparent;border-radius:999px;text-decoration:none;color:var(--accent);font-weight:600}
+    .links a:hover{border-color:var(--accent2);color:var(--accent);background:rgba(198,165,74,.18)}
+
+    .hero{
+      margin-top:18px;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      background:
+        radial-gradient(1200px 700px at 10% 10%, rgba(107,15,42,.14), transparent 60%),
+        radial-gradient(900px 700px at 90% 10%, rgba(214,179,106,.12), transparent 55%),
+        rgba(255,255,255,.62);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-inner{display:grid;grid-template-columns:1.2fr .8fr;gap:22px;padding:26px;position:relative;z-index:1}
+    @media (max-width:860px){.hero-inner{grid-template-columns:1fr}}
+    .kicker{color:var(--muted);font-size:14px;letter-spacing:.18em;text-transform:uppercase}
+    h1{margin:.35rem 0 0;font-size:44px;line-height:1.08;font-family: ui-serif, Georgia, "Times New Roman", serif; font-weight: 800; letter-spacing: .3px}
+    @media (max-width:520px){h1{font-size:36px}}
+    .sub{margin:12px 0 0;color:var(--muted);font-size:16px;line-height:1.6;max-width:60ch}
+    .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .btn{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:12px 14px;border-radius:999px;
+      border:1px solid var(--border);
+      text-decoration:none;font-weight:700;
+      background:rgba(255,255,255,.70);
+    }
+    .btn.primary{
+      border:1px solid var(--accent2);
+      background:var(--accent);
+      color:#fff;
+    }
+    .btn:hover{transform:translateY(-1px)}
+
+    .card{
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      background:var(--card);
+      box-shadow: 0 18px 50px rgba(20,12,14,.10);
+    }
+    .mini{padding:16px}
+    .mini h3{margin:0 0 6px;font-size:15px;color:var(--muted);font-weight:800;letter-spacing:.10em;text-transform:uppercase}
+    .mini .big{font-size:18px;margin:0}
+    .countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}
+    .tile{padding:12px;border-radius:18px;border:1px solid var(--border);background:rgba(255,255,255,.70);text-align:center}
+    .tile .n{font-size:24px;font-weight:800}
+    .tile .l{color:var(--muted);font-size:12px;margin-top:2px}
+
+    section{margin-top:22px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+    .span-6{grid-column:span 6}
+    .span-4{grid-column:span 4}
+    .span-8{grid-column:span 8}
+    .span-12{grid-column:span 12}
+    @media (max-width:860px){.span-6,.span-4,.span-8{grid-column:span 12}}
+
+    .section-title{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:14px 0 10px}
+    .section-title h2{margin:0;font-size:22px;font-family: ui-serif, Georgia, "Times New Roman", serif; font-weight:800; color:var(--accent); letter-spacing:.5px}
+    .section-title p{margin:0;color:var(--muted)}
+
+    .content{padding:18px}
+    .content p{margin:0;color:var(--muted);line-height:1.7}
+    .list{margin:10px 0 0;padding-left:18px;color:var(--muted);line-height:1.8}
+
+    .timeline{display:flex;flex-direction:column;gap:10px}
+    .event{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:18px;border:1px solid var(--border);background:rgba(255,255,255,.70)}
+    .time{min-width:74px;font-weight:800}
+    .event .meta{color:var(--muted);font-size:13px;margin-top:2px}
+
+    form{display:grid;gap:10px}
+    label{font-size:13px;color:var(--muted)}
+    input,select,textarea{
+      width:100%;padding:12px 12px;border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.82);
+      color:var(--text);
+      outline:none;
+    }
+    textarea{min-height:110px;resize:vertical}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+    .row4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px}
+    @media (max-width:1020px){.row4{grid-template-columns:1fr 1fr}}
+    @media (max-width:520px){.row4{grid-template-columns:1fr}}
+    @media (max-width:860px){.row3{grid-template-columns:1fr 1fr}}
+    @media (max-width:520px){.row3{grid-template-columns:1fr}}
+    @media (max-width:520px){.row2{grid-template-columns:1fr}}
+    .note{font-size:12px;color:var(--muted)}
+
+    .footer{margin-top:26px;padding:14px 18px;color:var(--muted);text-align:center}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,.70)}
+    .hero::before{
+      content:"I & I";
+      position:absolute;
+      right:-40px;
+      bottom:-60px;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-weight:900;
+      font-size:140px;
+      letter-spacing:6px;
+      color:rgba(107,15,42,.10);
+      transform:rotate(-8deg);
+      pointer-events:none;
+      z-index:0;
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand"><span class="pill"></span> <span>Ивелина & Иван</span></div>
+      <div class="links">
+        <a href="#details">Детайли</a>
+        <a href="#schedule">Програма</a>
+        <a href="#travel">Локации</a>
+        <a href="#rsvp">Отговор</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="hero" id="top">
+      <div class="hero-inner">
+        <div>
+          <div class="kicker">Запазете датата</div>
+          <h1>Сватба на <br><span style="color:#7a1028;">Ивелина & Иван</span></h1>
+          <p class="sub">Ще се радваме да празнуваме заедно! Елате да споделим любов, музика и много смях.</p>
+          <div class="cta-row">
+            <a class="btn primary" href="#rsvp">Потвърди присъствие</a>
+            <a class="btn" id="addToCalendar" href="#">Добави в календар</a>
+          </div>
+          <p class="note" style="margin-top:12px">Очакваме ви с нетърпение 🤍</p>
+        </div>
+
+        <div class="card mini">
+          <h3>Кога и къде</h3>
+          <p class="big"><strong id="weddingDateText">Събота, 5 Септември 2026</strong></p>
+          <p class="big" style="margin-top:6px">📍 <span id="venueText">Витоша Парк Хотел, София</span></p>
+          <div class="countdown" aria-label="Countdown">
+            <div class="tile"><div class="n" id="cdDays">—</div><div class="l">дни</div></div>
+            <div class="tile"><div class="n" id="cdHours">—</div><div class="l">часа</div></div>
+            <div class="tile"><div class="n" id="cdMins">—</div><div class="l">минути</div></div>
+            <div class="tile"><div class="n" id="cdSecs">—</div><div class="l">секунди</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section id="details">
+      <div class="section-title">
+        <h2>✨ Детайли</h2>
+        <p>Какво да очаквате</p>
+      </div>
+      <div class="grid">
+        <div class="card span-6"><div class="content">
+          <h3 style="margin:0 0 8px">Дрескод</h3>
+          <p>Темата е бордо ❤️ Ще се радваме, ако включите акцент в бордо, но всеки е свободен да се облече както се чувства най-добре и удобно.</p>
+          <ul class="list">
+            <li>Без бяло 🤍 (то е за булката 😄)</li>
+            <li>Удобни обувки за танци</li>
+          </ul>
+        </div></div>
+        <div class="card span-6"><div class="content">
+          <h3 style="margin:0 0 8px">Букети</h3>
+          <p>Молим ви да не носите букети. Най-големият подарък за нас е присъствието ви и хубавото настроение. 🤍</p>
+        </div></div>
+      </div>
+    </section>
+
+    <section id="schedule">
+      <div class="section-title">
+        <h2>🗓️ Програма</h2>
+        <p>Ориентировъчни часове</p>
+      </div>
+      <div class="card"><div class="content">
+        <div class="timeline">
+          <div class="event"><div class="time">15:00</div><div><strong>⛪ Църковен брак</strong><div class="meta">Тържествена церемония</div></div></div>
+          <div class="event"><div class="time">18:00</div><div><strong>💍 Изнесен ритуал</strong><div class="meta">Официална част и поздравления</div></div></div>
+          <div class="event"><div class="time">19:30</div><div><strong>🍽️ Празнична вечеря</strong><div class="meta">Наздравици и специални моменти</div></div></div>
+          <div class="event"><div class="time">22:45</div><div><strong>🎂 Рязане на торта</strong><div class="meta">Сладък финал на вечерта</div></div></div>
+        </div>
+      </div></div>
+    </section>
+
+    <section id="travel">
+      <div class="section-title">
+        <h2>📍 Локации</h2>
+        <p>Как да стигнете</p>
+      </div>
+      <div class="grid">
+        <div class="card span-8"><div class="content">
+          <h3 style="margin:0 0 8px">Карти</h3>
+          <p>Добавили сме отделни локации за удобство:</p>
+          <div class="cta-row" style="margin-top:10px">
+            <a class="btn" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=Vitosha+Park+Hotel+Sofia">📍 Ресторант (Витоша Парк Хотел)</a>
+            <a class="btn" target="_blank" rel="noreferrer" href="https://www.google.com/maps/search/?api=1&query=%D0%A6%D1%8A%D1%80%D0%BA%D0%B2%D0%B0+%D0%92%D1%8A%D0%B7%D0%B4%D0%B2%D0%B8%D0%B6%D0%B5%D0%BD%D0%B8%D0%B5+%D0%BD%D0%B0+%D0%A1%D0%B2.+%D0%9A%D1%80%D1%8A%D1%81%D1%82+%D0%93%D0%BE%D1%81%D0%BF%D0%BE%D0%B4%D0%B5%D0%BD+%D0%A1%D0%BE%D1%84%D0%B8%D1%8F">⛪ Църква „Въздвижение на Св. Кръст Господен“</a>
+          </div>
+          <p class="note" style="margin-top:10px">Можете да използвате бутоните по-горе за директна навигация в Google Maps.</p>
+        </div></div>
+        <div class="card span-4"><div class="content">
+          <h3 style="margin:0 0 8px">🚗 Паркинг</h3>
+          <p>Паркингът на Витоша Парк Хотел е <strong>безплатен за гостите</strong>.</p>
+          
+        </div></div>
+      </div>
+    </section>
+
+    <section id="rsvp">
+      <div class="section-title">
+        <h2>💌 Отговор</h2>
+        <p>Моля потвърдете присъствието си до <strong>30 Юни 2026</strong></p>
+      </div>
+      <div class="grid">
+        <div class="card span-12"><div class="content">
+          <form id="rsvpForm">
+            <div class="row4">
+              <div>
+                <label for="name">Име и фамилия</label>
+                <input id="name" name="name" required placeholder="Име Фамилия" />
+              </div>
+              <div>
+                <label for="attendance">Ще присъствам</label>
+                <select id="attendance" name="attendance" required>
+                  <option value="yes">Да</option>
+                  <option value="no">Не</option>
+                </select>
+              </div>
+              <div>
+                <label for="menu">Избор на меню (възрастни)</label>
+                <select id="menu" name="menu" required>
+                  <option value="meat">Месно</option>
+                  <option value="vegetarian">Вегетарианско</option>
+                  <option value="vegan">Веган</option>
+                </select>
+              </div>
+              <div>
+                <label for="guests">Брой възрастни</label>
+                <select id="guests" name="guests" required>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row2" style="margin-top:10px">
+              <div>
+                <label for="children">Брой деца</label>
+                <select id="children" name="children">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+              <div>
+                <label for="kids_menu_count">Брой детски менюта</label>
+                <select id="kids_menu_count" name="kids_menu_count">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+                <div class="note" style="margin-top:6px">Може да има деца без меню, затова полето е отделно.</div>
+              </div>
+            </div>
+
+            <div id="guestDetailsWrap" style="display:none;margin-top:10px">
+              <div class="note" style="margin-bottom:6px">Ако идвате с повече от един гост, моля попълнете данните за останалите гости:</div>
+              <div id="guestDetails"></div>
+            </div>
+
+            <div style="margin-top:10px">
+              <label for="msg">Съобщение</label>
+              <textarea id="msg" name="msg" placeholder="Пожелание / въпрос"></textarea>
+            </div>
+
+            <button class="btn primary" type="submit" style="margin-top:10px">Изпрати отговор</button>
+            <div class="note">След изпращане, отговорът се записва автоматично. Ако не стане (примерно блокирани заявки), ще се появи съобщение за грешка.</div>
+          </form>
+        </div></div>
+      </div>
+    </section>
+
+    <section id="contacts">
+      <div class="section-title">
+        <h2>📞 Контакти</h2>
+      </div>
+      <div class="card span-12"><div class="content">
+        <p>📞 0886695350 • 0887949061</p>
+        <p style="margin-top:8px">✉️ <a href="mailto:ivelinakostova7@gmail.com">ivelinakostova7@gmail.com</a><br>
+        ✉️ <a href="mailto:ivanantov80@protonmail.com">ivanantov80@protonmail.com</a></p>
+        <p style="margin-top:16px">Ако имате въпроси — сме насреща. Пишете ни.</p>
+        <p style="margin-top:16px" class="badge">#IvelinaIvanSvatba2026</p>
+      </div></div>
+    </section>
+
+    <div class="footer">
+      <div>С любов, <strong>Ивелина & Иван</strong> 🤍</div>
+    </div>
+  </main>
+
+  <script>
+    // ====== CONFIG ======
+    // Set your wedding datetime (local time). Example: 2026-06-20T17:30:00
+    const WEDDING_ISO = "2026-09-05T17:30:00";
+    const WEDDING_TITLE = "Сватба: Ивелина & Иван";
+    const WEDDING_LOCATION = "Витоша Парк Хотел, София";
+    const WEDDING_DESCRIPTION = "Заповядайте да празнуваме заедно!";
+
+    // ====== RSVP to Google Sheets ======
+    // 1) Create Google Apps Script Web App (see notes below)
+    // 2) Paste the deployed Web App URL here
+    const GOOGLE_SCRIPT_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";
+
+    // ====== Countdown ======
+    const target = new Date(WEDDING_ISO);
+    function pad(n){return String(n).padStart(2,'0');}
+    function tick(){
+      const now = new Date();
+      const ms = target - now;
+      const el = {
+        d: document.getElementById('cdDays'),
+        h: document.getElementById('cdHours'),
+        m: document.getElementById('cdMins'),
+        s: document.getElementById('cdSecs'),
+      };
+      if (ms <= 0){
+        el.d.textContent = '0'; el.h.textContent = '00'; el.m.textContent = '00'; el.s.textContent = '00';
+        return;
+      }
+      const totalSeconds = Math.floor(ms/1000);
+      const days = Math.floor(totalSeconds/86400);
+      const hours = Math.floor((totalSeconds%86400)/3600);
+      const mins = Math.floor((totalSeconds%3600)/60);
+      const secs = totalSeconds%60;
+      el.d.textContent = days;
+      el.h.textContent = pad(hours);
+      el.m.textContent = pad(mins);
+      el.s.textContent = pad(secs);
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    // ====== Add to Calendar (ICS download) ======
+    function toICSDate(d){
+      // UTC format: YYYYMMDDTHHMMSSZ
+      const yyyy = d.getUTCFullYear();
+      const mm = pad(d.getUTCMonth()+1);
+      const dd = pad(d.getUTCDate());
+      const hh = pad(d.getUTCHours());
+      const mi = pad(d.getUTCMinutes());
+      const ss = pad(d.getUTCSeconds());
+      return `${yyyy}${mm}${dd}T${hh}${mi}${ss}Z`;
+    }
+
+    document.getElementById('addToCalendar').addEventListener('click', (e) => {
+      e.preventDefault();
+      const start = new Date(WEDDING_ISO);
+      const end = new Date(start.getTime() + 6*60*60*1000); // +6 hours
+      const ics = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Wedding Site//BG//EN',
+        'CALSCALE:GREGORIAN',
+        'METHOD:PUBLISH',
+        'BEGIN:VEVENT',
+        `UID:${Date.now()}@wedding`,
+        `DTSTAMP:${toICSDate(new Date())}`,
+        `DTSTART:${toICSDate(start)}`,
+        `DTEND:${toICSDate(end)}`,
+        `SUMMARY:${WEDDING_TITLE}`,
+        `LOCATION:${WEDDING_LOCATION}`,
+        `DESCRIPTION:${WEDDING_DESCRIPTION}`,
+        'END:VEVENT',
+        'END:VCALENDAR'
+      ].join('\r\n');
+
+      const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'wedding.ics';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // ====== RSVP helpers ======
+    function menuOptions(){
+      return `
+        <option value="meat">Месно</option>
+        <option value="vegetarian">Вегетарианско</option>
+        <option value="vegan">Веган</option>
+      `;
+    }
+
+    function updateGuestDetailsVisibility(){
+      const attendance = document.getElementById('attendance').value;
+      const guests = parseInt(document.getElementById('guests').value, 10);
+      const wrap = document.getElementById('guestDetailsWrap');
+      const container = document.getElementById('guestDetails');
+
+      const show = (attendance === 'yes' && guests > 1);
+      wrap.style.display = show ? 'block' : 'none';
+
+      // Rebuild extra guest fields (guests-1)
+      container.innerHTML = '';
+      if (!show) return;
+
+      for (let i = 2; i <= guests; i++){
+        const block = document.createElement('div');
+        block.className = 'row2';
+        block.style.marginTop = '10px';
+        block.innerHTML = `
+          <div>
+            <label for="guest_name_${i}">Гост ${i}: Име и фамилия</label>
+            <input id="guest_name_${i}" name="guest_name_${i}" required placeholder="Име Фамилия" />
+          </div>
+          <div>
+            <label for="guest_menu_${i}">Гост ${i}: Меню</label>
+            <select id="guest_menu_${i}" name="guest_menu_${i}" required>
+              ${menuOptions()}
+            </select>
+          </div>
+        `;
+        container.appendChild(block);
+      }
+    }
+
+    document.getElementById('attendance').addEventListener('change', updateGuestDetailsVisibility);
+    document.getElementById('guests').addEventListener('change', updateGuestDetailsVisibility);
+    updateGuestDetailsVisibility();
+
+    // Ограничение: детските менюта да не са повече от броя деца
+    function syncKidsMenuLimit(){
+      const childrenSelect = document.getElementById('children');
+      const kidsMenuSelect = document.getElementById('kids_menu_count');
+      const childrenCount = Number(childrenSelect.value);
+
+      Array.from(kidsMenuSelect.options).forEach(opt => {
+        opt.disabled = Number(opt.value) > childrenCount;
+      });
+
+      if (Number(kidsMenuSelect.value) > childrenCount){
+        kidsMenuSelect.value = String(childrenCount);
+      }
+    }
+
+    document.getElementById('children').addEventListener('change', syncKidsMenuLimit);
+    syncKidsMenuLimit();
+
+    // ====== RSVP (Google Sheets) ======
+    const rsvpStatus = document.createElement('div');
+    rsvpStatus.className = 'note';
+    rsvpStatus.style.marginTop = '8px';
+    document.getElementById('rsvpForm').appendChild(rsvpStatus);
+
+    document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      
+
+      if (!GOOGLE_SCRIPT_URL || GOOGLE_SCRIPT_URL.includes('PASTE_YOUR_GOOGLE')) {
+        rsvpStatus.textContent = 'Липсва линк към Google Sheets (GOOGLE_SCRIPT_URL). Поставете URL-а от Apps Script.';
+        return;
+      }
+
+      rsvpStatus.textContent = 'Изпращане...';
+
+      try {
+        const resp = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: data.name,
+            attendance: data.attendance,
+            guests: Number(data.guests),
+            children: Number(data.children || 0),
+            kidsMenuCount: Number(data.kids_menu_count || 0),
+            menu: data.menu,
+            guestDetails: (() => {
+              const g = Number(data.guests);
+              if (!(data.attendance === 'yes' && g > 1)) return '';
+              const items = [];
+              for (let i = 2; i <= g; i++){
+                const n = data[`guest_name_${i}`] || '';
+                const m = data[`guest_menu_${i}`] || '';
+                if (n.trim()) items.push(`${n.trim()} — ${m}`);
+              }
+              return items.join('; ');
+            })(),
+            message: data.msg || '',
+            timestamp: new Date().toISOString()
+          })
+        });
+
+        if (!resp.ok) throw new Error('Bad response');
+        const text = await resp.text();
+
+        // Apps Script often returns plain text
+        rsvpStatus.textContent = 'Благодарим! Отговорът е записан.';
+        form.reset();
+        updateGuestDetailsVisibility();
+      } catch (err) {
+        rsvpStatus.textContent = 'Грешка при изпращане. Опитайте пак или пишете на някой от имейлите в Контакти.';
+      }
+    });
+
+    /*
+      GOOGLE SHEETS SETUP (quick):
+      1) Google Drive -> New -> Google Apps Script
+      2) Paste code:
+         function doPost(e){
+           const ss = SpreadsheetApp.openById('YOUR_SHEET_ID');
+           const sh = ss.getSheetByName('Responses') || ss.insertSheet('Responses');
+           const data = JSON.parse(e.postData.contents);
+           if (sh.getLastRow() === 0){
+             sh.appendRow(['timestamp','name','attendance','guests','children','kidsMenuCount','menu','guestDetails','message']);
+           }
+           sh.appendRow([new Date(), data.name, data.attendance, data.guests, data.children, data.kidsMenuCount, data.menu, data.guestDetails, data.message]);
+           return ContentService.createTextOutput('OK').setMimeType(ContentService.MimeType.TEXT);
+         }
+      3) Deploy -> New deployment -> Web app
+         - Execute as: Me
+         - Who has access: Anyone
+      4) Copy Web App URL into GOOGLE_SCRIPT_URL above.
+    */
+  </script>
+</body>
+</html>
