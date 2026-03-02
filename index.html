@@ -430,6 +430,9 @@
     });
 
     // ====== RSVP helpers ======
+    const MENU_BG = { meat: 'Месно', vegetarian: 'Вегетарианско', vegan: 'Веган' };
+    const ATT_BG = { yes: 'Да', no: 'Не' };
+
     function menuOptions(){
       return `
         <option value="meat">Месно</option>
@@ -517,18 +520,19 @@
         // Build payload
         const payload = {
           name: data.name,
-          attendance: data.attendance,
+          attendance: ATT_BG[data.attendance] || data.attendance,
           guests: Number(data.guests),
           children: Number(data.children || 0),
           kidsMenuCount: Number(data.kids_menu_count || 0),
-          menu: data.menu,
+          menu: MENU_BG[data.menu] || data.menu,
           guestDetails: (() => {
             const g = Number(data.guests);
             if (!(data.attendance === 'yes' && g > 1)) return '';
             const items = [];
             for (let i = 2; i <= g; i++){
               const n = data[`guest_name_${i}`] || '';
-              const m = data[`guest_menu_${i}`] || '';
+              const mCode = data[`guest_menu_${i}`] || '';
+              const m = MENU_BG[mCode] || mCode;
               if (n.trim()) items.push(`${n.trim()} — ${m}`);
             }
             return items.join('; ');
@@ -577,7 +581,7 @@
         }
 
         if (sent) {
-          rsvpStatus.textContent = 'Благодарим!Отговорът е изпратен. :)';
+          rsvpStatus.textContent = 'Благодарим! Отговорът е изпратен. (Проверете таблицата след ~10 сек.)';
           form.reset();
           updateGuestDetailsVisibility();
           syncKidsMenuLimit();
@@ -610,7 +614,7 @@
            }
 
            if (sh.getLastRow() === 0){
-             sh.appendRow(['timestamp','name','attendance','guests','children','kidsMenuCount','menu','guestDetails','message']);
+             sh.appendRow(['Време','Име и фамилия','Ще присъствам','Брой възрастни','Брой деца','Брой детски менюта','Меню (възрастни)','Гости (име — меню)','Съобщение']);
            }
            sh.appendRow([
              new Date(),
@@ -623,12 +627,69 @@
              data.guestDetails || '',
              data.message || ''
            ]);
+           updateStats_(ss);
            return ContentService.createTextOutput('OK');
          }
 
          // Optional quick test in browser
          function doGet(){
            return ContentService.createTextOutput('OK');
+         }
+
+         // Автоматична статистика в самия Google Sheet (sheet: "Stats")
+         function updateStats_(ss){
+           const sh = ss.getSheetByName('Responses');
+           const rows = sh ? sh.getDataRange().getValues() : [];
+           const stats = ss.getSheetByName('Stats') || ss.insertSheet('Stats');
+
+           // Indices according to header we write:
+           // 0:Време,1:Име,2:Ще присъствам,3:Брой възрастни,4:Брой деца,5:Брой детски менюта,6:Меню (възрастни),7:Гости (име — меню),8:Съобщение
+           let adults = 0, kids = 0, kidsMenus = 0;
+           const menuCounts = { 'Месно':0, 'Вегетарианско':0, 'Веган':0 };
+
+           for (let r=1; r<rows.length; r++){
+             const row = rows[r];
+             if (String(row[2] || '') !== 'Да') continue;
+
+             const g = Number(row[3] || 0);
+             const c = Number(row[4] || 0);
+             const km = Number(row[5] || 0);
+             const m0 = String(row[6] || '');
+
+             adults += g;
+             kids += c;
+             kidsMenus += km;
+             if (menuCounts[m0] != null) menuCounts[m0] += 1;
+
+             const details = String(row[7] || '');
+             if (details){
+               details.split(';').forEach(part => {
+                 const p = part.trim();
+                 if (!p) return;
+                 const pieces = p.split('—');
+                 const m = pieces.length > 1 ? pieces[1].trim() : '';
+                 if (menuCounts[m] != null) menuCounts[m] += 1;
+               });
+             }
+           }
+
+           const total = adults + kids;
+
+           // Write a compact table
+           stats.clear();
+           stats.getRange(1,1,9,2).setValues([
+             ['Статистика (автоматично)', ''],
+             ['Общо хора (възрастни + деца)', total],
+             ['Възрастни (вкл. придружители)', adults],
+             ['Деца', kids],
+             ['Детски менюта', kidsMenus],
+             ['Меню: Месно', menuCounts['Месно']],
+             ['Меню: Вегетарианско', menuCounts['Вегетарианско']],
+             ['Меню: Веган', menuCounts['Веган']],
+             ['Последно обновяване', new Date()],
+           ]);
+           stats.getRange(1,1,1,2).setFontWeight('bold');
+           stats.autoResizeColumns(1,2);
          }
       3) Deploy -> New deployment -> Web app
          - Execute as: Me
