@@ -350,7 +350,6 @@
     const WEDDING_TITLE = "Сватба: Ивелина & Иван";
     const WEDDING_LOCATION = "Витоша Парк Хотел, София";
     const WEDDING_DESCRIPTION = "Заповядайте да празнуваме заедно!";
-
     // ====== RSVP to Google Sheets ======
     // 1) Create Google Apps Script Web App (see notes below)
     // 2) Paste the deployed Web App URL here
@@ -515,39 +514,76 @@
       rsvpStatus.textContent = 'Изпращане...';
 
       try {
-        const resp = await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: data.name,
-            attendance: data.attendance,
-            guests: Number(data.guests),
-            children: Number(data.children || 0),
-            kidsMenuCount: Number(data.kids_menu_count || 0),
-            menu: data.menu,
-            guestDetails: (() => {
-              const g = Number(data.guests);
-              if (!(data.attendance === 'yes' && g > 1)) return '';
-              const items = [];
-              for (let i = 2; i <= g; i++){
-                const n = data[`guest_name_${i}`] || '';
-                const m = data[`guest_menu_${i}`] || '';
-                if (n.trim()) items.push(`${n.trim()} — ${m}`);
-              }
-              return items.join('; ');
-            })(),
-            message: data.msg || '',
-            timestamp: new Date().toISOString()
-          })
-        });
+        // Build payload
+        const payload = {
+          name: data.name,
+          attendance: data.attendance,
+          guests: Number(data.guests),
+          children: Number(data.children || 0),
+          kidsMenuCount: Number(data.kids_menu_count || 0),
+          menu: data.menu,
+          guestDetails: (() => {
+            const g = Number(data.guests);
+            if (!(data.attendance === 'yes' && g > 1)) return '';
+            const items = [];
+            for (let i = 2; i <= g; i++){
+              const n = data[`guest_name_${i}`] || '';
+              const m = data[`guest_menu_${i}`] || '';
+              if (n.trim()) items.push(`${n.trim()} — ${m}`);
+            }
+            return items.join('; ');
+          })(),
+          message: data.msg || '',
+          timestamp: new Date().toISOString()
+        };
 
-        if (!resp.ok) throw new Error('Bad response');
-        const text = await resp.text();
+        // Best effort send: sendBeacon avoids CORS/preflight issues on static sites (GitHub Pages)
+        let sent = false;
+        if (navigator.sendBeacon) {
+          sent = navigator.sendBeacon(
+            GOOGLE_SCRIPT_URL,
+            new Blob([JSON.stringify(payload)], { type: 'text/plain;charset=utf-8' })
+          );
+        }
 
-        // Apps Script often returns plain text
-        rsvpStatus.textContent = 'Благодарим! Отговорът е записан.';
-        form.reset();
-        updateGuestDetailsVisibility();
+        // Fallback: hidden form POST (also avoids CORS)
+        if (!sent) {
+          // Create hidden iframe once
+          let frame = document.getElementById('rsvpFrame');
+          if (!frame) {
+            frame = document.createElement('iframe');
+            frame.id = 'rsvpFrame';
+            frame.name = 'rsvpFrame';
+            frame.style.display = 'none';
+            document.body.appendChild(frame);
+          }
+
+          const f = document.createElement('form');
+          f.method = 'POST';
+          f.action = GOOGLE_SCRIPT_URL;
+          f.target = 'rsvpFrame';
+          f.style.display = 'none';
+
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'payload';
+          input.value = JSON.stringify(payload);
+          f.appendChild(input);
+
+          document.body.appendChild(f);
+          f.submit();
+          f.remove();
+          sent = true;
+        }
+
+        if (sent) {
+          rsvpStatus.textContent = 'Благодарим! Отговорът е изпратен. (Проверете таблицата след ~10 сек.)';
+          form.reset();
+          updateGuestDetailsVisibility();
+          syncKidsMenuLimit();
+        } else {
+          throw new Error('Send failed');
+        }
       } catch (err) {
         rsvpStatus.textContent = 'Грешка при изпращане. Опитайте пак или пишете на някой от имейлите в Контакти.';
       }
@@ -560,17 +596,44 @@
          function doPost(e){
            const ss = SpreadsheetApp.openById('YOUR_SHEET_ID');
            const sh = ss.getSheetByName('Responses') || ss.insertSheet('Responses');
-           const data = JSON.parse(e.postData.contents);
+
+           // Accept either raw JSON body OR form field 'payload'
+           let data = {};
+           try {
+             if (e && e.parameter && e.parameter.payload) {
+               data = JSON.parse(e.parameter.payload);
+             } else {
+               data = JSON.parse(e.postData.contents);
+             }
+           } catch(err) {
+             data = { raw: (e && e.postData) ? e.postData.contents : '' };
+           }
+
            if (sh.getLastRow() === 0){
              sh.appendRow(['timestamp','name','attendance','guests','children','kidsMenuCount','menu','guestDetails','message']);
            }
-           sh.appendRow([new Date(), data.name, data.attendance, data.guests, data.children, data.kidsMenuCount, data.menu, data.guestDetails, data.message]);
-           return ContentService.createTextOutput('OK').setMimeType(ContentService.MimeType.TEXT);
+           sh.appendRow([
+             new Date(),
+             data.name || '',
+             data.attendance || '',
+             data.guests ?? '',
+             data.children ?? '',
+             data.kidsMenuCount ?? '',
+             data.menu || '',
+             data.guestDetails || '',
+             data.message || ''
+           ]);
+           return ContentService.createTextOutput('OK');
+         }
+
+         // Optional quick test in browser
+         function doGet(){
+           return ContentService.createTextOutput('OK');
          }
       3) Deploy -> New deployment -> Web app
          - Execute as: Me
          - Who has access: Anyone
-      4) Copy Web App URL into GOOGLE_SCRIPT_URL above.
+      4) Copy Web App URL (ends with /exec) into GOOGLE_SCRIPT_URL above.
     */
   </script>
 </body>
