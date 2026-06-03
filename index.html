@@ -355,6 +355,40 @@
     // 2) Paste the deployed Web App URL here
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlclxn-qPrDmk2j4jTP8CfGJtUp3loKQZyWoLYeGDtxf0UkyefJ1Hfm3SwF8LpgJAm7g/exec";
 
+    // RSVP deadline: 1 July 2026 00:00 Sofia time
+const RSVP_DEADLINE = new Date("2026-06-01T00:00:00+03:00");
+
+function checkRSVPDeadline() {
+  const now = new Date();
+
+  if (now >= RSVP_DEADLINE) {
+    const form = document.getElementById('rsvpForm');
+
+    // Скрива формата
+    form.innerHTML = `
+      <div style="
+        padding:20px;
+        border:1px solid var(--border);
+        border-radius:14px;
+        background:rgba(255,255,255,.8);
+        text-align:center;
+      ">
+        <h3>💌 Формата е затворена</h3>
+        <p>Срокът за потвърждение изтече на 30 Юни 2026.</p>
+        <p>Ако все пак искате да потвърдите или имате промяна, свържете се с нас по телефон или имейл.</p>
+      </div>
+    `;
+  }
+}
+
+checkRSVPDeadline();
+  document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+  if (new Date() >= RSVP_DEADLINE) {
+    e.preventDefault();
+    alert('Срокът за потвърждение е изтекъл.');
+    return;
+  }
+
     // ====== Countdown ======
     const target = new Date(WEDDING_ISO);
     function pad(n){return String(n).padStart(2,'0');}
@@ -592,7 +626,7 @@
         rsvpStatus.textContent = 'Грешка при изпращане. Опитайте пак или пишете на някой от имейлите в Контакти.';
       }
     });
-
+});
     /*
       GOOGLE SHEETS SETUP (quick):
       1) Google Drive -> New -> Google Apps Script
