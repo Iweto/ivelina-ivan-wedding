@@ -382,12 +382,6 @@ function checkRSVPDeadline() {
 }
 
 checkRSVPDeadline();
-  document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-  if (new Date() >= RSVP_DEADLINE) {
-    e.preventDefault();
-    alert('Срокът за потвърждение е изтекъл.');
-    return;
-  }
 
     // ====== Countdown ======
     const target = new Date(WEDDING_ISO);
@@ -537,9 +531,14 @@ checkRSVPDeadline();
     document.getElementById('rsvpForm').appendChild(rsvpStatus);
 
     document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const data = Object.fromEntries(new FormData(form).entries());
+    if (new Date() >= RSVP_DEADLINE) {
+    e.preventDefault();
+    alert('Срокът за потвърждение е изтекъл.');
+    return;
+    }
+    e.preventDefault();
+    const form = e.target;
+    const data = Object.fromEntries(new FormData(form).entries());
 
       
 
@@ -626,7 +625,6 @@ checkRSVPDeadline();
         rsvpStatus.textContent = 'Грешка при изпращане. Опитайте пак или пишете на някой от имейлите в Контакти.';
       }
     });
-});
     /*
       GOOGLE SHEETS SETUP (quick):
       1) Google Drive -> New -> Google Apps Script
